@@ -1,6 +1,6 @@
 import { RouteProp, useRoute } from '@react-navigation/native';
-import { Image, StyleSheet, Text, View } from 'react-native';
-const ACCESS_KEY = 'RefpOBswH4_nJ7hoHRfRzAcwD63__BIfgWvL_nW_ErA';
+import { useState } from 'react';
+import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
 
 type RootStackParamList = {
   Image: { imageUrl: string };
@@ -9,16 +9,17 @@ type RootStackParamList = {
 export default function ImageScreen() {
   const route = useRoute<RouteProp<RootStackParamList, 'Image'>>();
   const imageUrl = route.params?.imageUrl;
+  const [loading, setIsLoading] = useState(true);
 
   return (
     <View style={styles.container}>
-      {imageUrl 
-      ?
-        <Image
-          source={{ uri: `${imageUrl}${ACCESS_KEY}` }}
-          style={styles.image}
-        />
-      : <Text>Image not available</Text>}
+      {loading && <ActivityIndicator size='large' color="#0000ff" />}
+
+      <Image
+        source={{ uri: `${imageUrl}` }}
+        style={styles.image}
+        onLoad={() => setIsLoading(false)}
+      />
     </View>
   );
 }
@@ -27,6 +28,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
     alignItems: 'center',
+    justifyContent: 'center',
     paddingBottom: 10,
     width: '100%',
     height: '100%',

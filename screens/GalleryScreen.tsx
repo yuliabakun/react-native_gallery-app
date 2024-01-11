@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, View, Text } from 'react-native';
+import { ScrollView, StyleSheet, View, Text, FlatList } from 'react-native';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
@@ -37,17 +37,19 @@ export default function GalleryScreen() {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.list}>
-        {data.map(image => (
+      <FlatList
+        style={styles.list}
+        data={data}
+        keyExtractor={(image) => image.id.toString()}
+        renderItem={({ item: image }) => (
           <ListItem
-            key={image.id}
             imageLink={image.urls.small}
             imageAlt={image.description}
             authorName={image.user.name}
-            navigation={() => navigateToImage(image.urls.small)}
+            navigation={() => navigateToImage(image.urls.raw)}
           />
-        ))}
-      </ScrollView>
+        )}
+      />
     </View>
   );
 }
